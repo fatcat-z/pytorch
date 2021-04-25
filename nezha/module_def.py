@@ -9,8 +9,6 @@ import onnx
 import copy
 import io
 
-import nezha_helper
-
 old_call = torch._C.ScriptMethod.__call__
 
 def py_meth_call(*args, **kwargs):

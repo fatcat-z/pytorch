@@ -9,9 +9,7 @@ from contextlib import contextmanager
 import time
 import copy
 
-import nezha_helper
-
-torch.ops.load_library("/home/jay/repos/fatcat-z/pytorch/jay_my_ops/build/libonnx_ops.so")
+torch.ops.load_library("/home/jay/repos/fatcat-z/pytorch/nezha_ops/build/libnezha_ops.so")
 
 ############################## Preparation ##########################################################
 
@@ -92,18 +90,28 @@ total_hidden_size=4
 total_num_classes=10
 dummy_input = torch.randn(32, 5)
 
-with torch.no_grad():
+x = torch.ops.nezha_ops.dummy_op(dummy_input)
 
-    my_model = NeuralNet_All(total_input_size, total_hidden_size, total_num_classes)
-    my_model.eval()
-    output = my_model(dummy_input)
+result = torch.ops.nezha_ops.get_str_op(dummy_input)
+print(result)
 
-    new_module = SmartModule(my_model)
-    new_output = new_module(dummy_input)
-    print(new_output)
+x = torch.ops.nezha_ops.fake_op(dummy_input, 10)
 
-    is_same = torch.allclose(output, new_output, rtol=1e-05, atol=1e-08, equal_nan=False)
-    print('Are 2 outputs are matched? - ', is_same)
+result = torch.ops.nezha_ops.get_str_op(dummy_input)
+print(result)
+
+# with torch.no_grad():
+
+    # my_model = NeuralNet_All(total_input_size, total_hidden_size, total_num_classes)
+    # my_model.eval()
+    # output = my_model(dummy_input)
+
+    # new_module = SmartModule(my_model)
+    # new_output = new_module(dummy_input)
+    # print(new_output)
+
+    # is_same = torch.allclose(output, new_output, rtol=1e-05, atol=1e-08, equal_nan=False)
+    # print('Are 2 outputs are matched? - ', is_same)
 
     # torch.onnx.try_ort_inference("first_part.onnx", dummy_input)
 

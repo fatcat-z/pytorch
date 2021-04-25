@@ -16,11 +16,8 @@ void NeZha_TryUpdateModule(
 Module NeZha_UpdateOps(
     Module& dst_module);
 
-Module NeZha_ConvertModule(Module& module, torch::Tensor input) ;
+Module NeZha_ConvertModule(Module& module, torch::Tensor input);
 
-void NeZha_TrySplitModule(
-    Module& moudle_1st,
-    Module& moudle_2nd);
 
 } // namespace jit
 

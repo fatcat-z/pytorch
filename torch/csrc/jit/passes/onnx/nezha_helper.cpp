@@ -416,28 +416,5 @@ static void update2ndGraph(Module& module){
     printf("\n------ Print second module after: \n%s ------", module.dump_to_str(true, false, false).c_str());
 }
 
-std::vector<Module> NeZha_GetSplitModules(
-    Module& module) {
-    
-    auto splitModules = std::vector<Module>{};
-
-    auto module_1st = module.clone();
-    auto graph_bak = module_1st.get_method("forward").graph()->copy();
-    updateGraph(graph_bak);
-    const auto method_name = QualifiedName(*module_1st.type()->name(), "forward");
-    module_1st.type()->unsafeRemoveMethod("forward");
-    module_1st._ivalue()->compilation_unit()->unsafeRemoveMethod(method_name);
-    auto fn = module_1st._ivalue()->compilation_unit()->create_function(
-        method_name, graph_bak);
-    module_1st.type()->addMethod(fn);
-    splitModules.push_back(module_1st);
-
-    auto module_2nd = module.clone();
-    update2ndGraph(module_2nd);
-    splitModules.push_back(module_2nd);
-
-    return splitModules;
-}
-
 } // namespace jit
 } // namespace torch

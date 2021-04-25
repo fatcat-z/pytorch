@@ -564,6 +564,7 @@ libtorch_python_core_sources = [
     "torch/csrc/jit/passes/onnx/function_substitution.cpp",
     "torch/csrc/jit/passes/onnx/fold_if_node.cpp",
     "torch/csrc/jit/passes/onnx/helper.cpp",
+    "torch/csrc/jit/passes/onnx/nezha_helper.cpp",
     "torch/csrc/jit/passes/onnx/peephole.cpp",
     "torch/csrc/jit/passes/onnx/preprocess_for_onnx.cpp",
     "torch/csrc/jit/passes/onnx/prepare_division_for_onnx.cpp",

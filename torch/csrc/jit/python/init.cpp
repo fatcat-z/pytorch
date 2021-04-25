@@ -45,6 +45,7 @@
 #include <torch/csrc/jit/passes/onnx/fold_if_node.h>
 #include <torch/csrc/jit/passes/onnx/function_substitution.h>
 #include <torch/csrc/jit/passes/onnx/list_model_parameters.h>
+#include <torch/csrc/jit/passes/onnx/nezha_helper.h>
 #include <torch/csrc/jit/passes/onnx/pattern_conversion/pattern_conversion.h>
 #include <torch/csrc/jit/passes/onnx/pattern_conversion/pattern_encapsulation.h>
 #include <torch/csrc/jit/passes/onnx/peephole.h>
@@ -148,6 +149,10 @@ void initJITBindings(PyObject* module) {
       .def(
           "_jit_debug_fuser_num_cached_kernel_specs",
           torch::jit::fuser::debugNumCachedKernelSpecs)
+      .def("_jit_nezha_convert_module", 
+          [](Module& module, at::Tensor input) {
+            return NeZha_ConvertModule(module, input);
+          })
       .def("_jit_pass_onnx_remove_print", RemovePrintOps)
       .def("_jit_pass_onnx_preprocess_caffe2", PreprocessCaffe2Ops)
       .def("_jit_pass_onnx", ToONNX)

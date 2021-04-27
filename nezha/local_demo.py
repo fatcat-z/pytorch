@@ -3,7 +3,8 @@ import torch
 import numpy as np
 from torch import nn
 
-from module_def import SmartModule
+
+# from module_def import SmartModule
 from contextlib import contextmanager
 
 import time

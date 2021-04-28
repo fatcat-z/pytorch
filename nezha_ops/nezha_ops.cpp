@@ -27,23 +27,19 @@ torch::Tensor dummy_op(torch::Tensor testData) {
         my_name = std::make_shared<std::string>("update in dummy_op");
     }
 
-    auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-    std::vector<int64_t> input_node_dims = std::vector<int64_t>{2};
-    Ort::Value input_tensor = Ort::Value::CreateTensor<float>(memory_info, (float*)testData.data_ptr(), testData.nbytes(), input_node_dims.data(), 1);
-    printf("Yes, got new values.\n");
-
-
     // auto input_data = at::toDLPack(testData);
     // auto ort_input_data = onnxruntime::python::OrtValueToDlpack(input_data);
     Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "dummy_op");
     Ort::SessionOptions session_options;
-    Ort::Session session = Ort::Session(env, "/home/jay/my_nezha_test.onnx", session_options);
+    Ort::Session session = Ort::Session(env, "/home/jay/repos/test_ort_value.onnx", session_options);
+    Ort::AllocatorWithDefaultOptions allocator;
     // auto output_tensors = session.Run(session.GetInputNames(), input_tensors, session.GetOutputNames());
 
     size_t num_input_nodes = session.GetInputCount();
-    printf("total input count: %ld\n", num_input_nodes);
-    Ort::AllocatorWithDefaultOptions allocator;
     std::vector<const char*> input_node_names(num_input_nodes);
+    std::vector<int64_t> input_node_dims;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
+
+    printf("total input count: %ld\n", num_input_nodes);
 
     for (int i = 0; i < num_input_nodes; i++) {
         // print input node names
@@ -59,14 +55,24 @@ torch::Tensor dummy_op(torch::Tensor testData) {
         printf("Input %d : type=%d\n", i, type);
 
         // print input shapes/dims
-        // input_node_dims = tensor_info.GetShape();
-        // printf("Input %d : num_dims=%zu\n", i, input_node_dims.size());
-        // for (int j = 0; j < input_node_dims.size(); j++)
-        // printf("Input %d : dim %d=%jd\n", i, j, input_node_dims[j]);
+        input_node_dims = tensor_info.GetShape();
+        printf("Input %d : num_dims=%zu\n", i, input_node_dims.size());
+        for (int j = 0; j < input_node_dims.size(); j++)
+            printf("Input %d : dim %d=%jd\n", i, j, input_node_dims[j]);
     }
 
+    std::vector<const char*> output_node_names = {"11"};
 
-    std::vector<const char*> output_node_names = {"output.13"};
+    auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+    printf("testData.nbytes: %ld \n", testData.nbytes());
+    size_t input_tensor_size = 32 * 5;
+    std::vector<float> input_tensor_values(input_tensor_size);
+    for (unsigned int i = 0; i < input_tensor_size; i++)
+        input_tensor_values[i] = (float)i / (input_tensor_size + 1);
+
+    Ort::Value input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_tensor_values.data(), input_tensor_size, (const int64_t*)input_node_dims.data(), input_node_dims.size());//, ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT);
+    printf("Yes, got new values.\n");
+    printf("input_node_names: %ld \n", input_node_names.capacity());
     auto output_tensors = session.Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 1);
 
     printf(" ===== init Ort::Session successfully in dummy_op. =====\n");

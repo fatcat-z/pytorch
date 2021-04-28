@@ -59,7 +59,7 @@ class NeuralNet_All(nn.Module):
         out = self.fc1(x)
         out = self.relu(out)
         out = torch.add(out, 1)
-        out = torch.ops.onnx_ops.dummy_ops(out)
+        # out = torch.ops.onnx_ops.dummy_ops(out)
         out = self.fc2(out)
         out = self.relu(out)
         out = self.relu(out)
@@ -86,6 +86,8 @@ def export_c_module(m, inputs, outputs, file_name):
 #####################################################################################################
 
 
+
+
 total_input_size=5
 total_hidden_size=4
 total_num_classes=10
@@ -103,9 +105,11 @@ print(result)
 
 # with torch.no_grad():
 
-    # my_model = NeuralNet_All(total_input_size, total_hidden_size, total_num_classes)
-    # my_model.eval()
-    # output = my_model(dummy_input)
+#     my_model = NeuralNet_All(total_input_size, total_hidden_size, total_num_classes)
+#     my_model.eval()
+#     # output = my_model(dummy_input)
+
+#     torch.onnx.export(my_model, (dummy_input,), "test_ort_value.onnx", verbose=True)
 
     # new_module = SmartModule(my_model)
     # new_output = new_module(dummy_input)

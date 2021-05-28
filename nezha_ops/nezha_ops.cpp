@@ -33,7 +33,6 @@ torch::Tensor dummy_op(torch::Tensor testData) {
     Ort::SessionOptions session_options;
     Ort::Session session = Ort::Session(env, "/home/jay/repos/test_ort_value.onnx", session_options);
     Ort::AllocatorWithDefaultOptions allocator;
-    // auto output_tensors = session.Run(session.GetInputNames(), input_tensors, session.GetOutputNames());
 
     size_t num_input_nodes = session.GetInputCount();
     std::vector<const char*> input_node_names(num_input_nodes);
@@ -75,7 +74,6 @@ torch::Tensor dummy_op(torch::Tensor testData) {
     printf("input_node_names: %ld \n", input_node_names.capacity());
     auto output_tensors = session.Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 1);
 
-    printf(" ===== init Ort::Session successfully in dummy_op. =====\n");
     return testData.clone();
 }
 

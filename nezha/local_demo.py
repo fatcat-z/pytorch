@@ -85,9 +85,6 @@ def export_c_module(m, inputs, outputs, file_name):
 
 #####################################################################################################
 
-
-
-
 total_input_size=5
 total_hidden_size=4
 total_num_classes=10

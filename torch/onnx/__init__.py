@@ -31,7 +31,7 @@ def _export(*args, **kwargs):
 
 def export(model, args, f, export_params=True, verbose=False, training=TrainingMode.EVAL,
            input_names=None, output_names=None, aten=False,
-           operator_export_type=None, opset_version=None, _retain_param_name=True,
+           operator_export_type=None, opset_version=None,
            do_constant_folding=True, example_outputs=None, strip_doc_string=True,
            dynamic_axes=None, keep_initializers_as_inputs=None, custom_opsets=None,
            enable_onnx_checker=True, use_external_data_format=False):
@@ -304,10 +304,10 @@ def export(model, args, f, export_params=True, verbose=False, training=TrainingM
     from torch.onnx import utils
     return utils.export(model, args, f, export_params, verbose, training,
                         input_names, output_names, aten,
-                        operator_export_type, opset_version, _retain_param_name,
-                        do_constant_folding, example_outputs,
-                        strip_doc_string, dynamic_axes, keep_initializers_as_inputs,
-                        custom_opsets, enable_onnx_checker, use_external_data_format)
+                        operator_export_type, opset_version, do_constant_folding,
+                        example_outputs, strip_doc_string, dynamic_axes,
+                        keep_initializers_as_inputs, custom_opsets,
+                        enable_onnx_checker, use_external_data_format)
 
 
 def export_to_pretty_string(*args, **kwargs):

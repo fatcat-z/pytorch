@@ -34,7 +34,7 @@ def export(model, args, f, export_params=True, verbose=False, training=TrainingM
            operator_export_type=None, opset_version=None, _retain_param_name=True,
            do_constant_folding=True, example_outputs=None, strip_doc_string=True,
            dynamic_axes=None, keep_initializers_as_inputs=None, custom_opsets=None,
-           enable_onnx_checker=True, use_external_data_format=False):
+           use_external_data_format=False):
     r"""
     Exports a model into ONNX format. If ``model`` is not a
     :class:`torch.jit.ScriptModule` nor a :class:`torch.jit.ScriptFunction`, this runs
@@ -288,8 +288,6 @@ def export(model, args, f, export_params=True, verbose=False, training=TrainingM
             If a custom opset is referenced by ``model`` but not mentioned in this dictionary,
             the opset version is set to 1.
 
-        enable_onnx_checker (bool, default True): If True the onnx model checker will be run
-            to ensure the exported model is a valid ONNX model.
         use_external_data_format (bool, default False): If True, then some of the model
             parameters are stored in external data files and not in the ONNX model file itself.
             Models larger than 2GB cannot be exported in one file because of size limits imposed
@@ -307,7 +305,7 @@ def export(model, args, f, export_params=True, verbose=False, training=TrainingM
                         operator_export_type, opset_version, _retain_param_name,
                         do_constant_folding, example_outputs,
                         strip_doc_string, dynamic_axes, keep_initializers_as_inputs,
-                        custom_opsets, enable_onnx_checker, use_external_data_format)
+                        custom_opsets, use_external_data_format)
 
 
 def export_to_pretty_string(*args, **kwargs):
